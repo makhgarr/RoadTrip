@@ -1,22 +1,18 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from .form import RegisterCustomerForm
+from django.contrib.auth import login, logout
 
 
 # register a customer
 def register_customer(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            print('opppppppppppppppppppppppppppppppppppppp')
-            print(username)
             messages.info(request, 'YOUR ACCOUNT HAS BEEN SUCCESSFULLY REGISTERED, PLEASE LOGIN TO CONTINUE')
-            return redirect('login')
+            return redirect('dashboard')
         else:
             messages.warning(request, 'SOMETHING WENT RONG. PLEASE CHECK FORM INPUTS')
             return redirect('register_customer')
@@ -30,7 +26,7 @@ def register_customer(request):
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
-        password = request.POST.get('password')
+        print(username)
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
